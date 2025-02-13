@@ -127,7 +127,9 @@ strategy = HFTMeanReversionStrategy(
 
 ## Deployment with Docker and DigitalOcean
 
-To run this Python script 24/7 without relying on your local machine, you can containerize the application with Docker and deploy it on a DigitalOcean Droplet. Follow these steps:
+To run this Python script 24/7 without relying on your local machine, you can containerize the application with Docker and deploy it on a DigitalOcean Droplet.
+For detailed steps on deploying this strategy, check the [Deployment Guide](DEPLOYMENT.md). Else follow the below steps:
+
 
 ### 1. Create a Dockerfile
 
