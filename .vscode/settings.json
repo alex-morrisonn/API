@@ -6,6 +6,7 @@
         "Klines",
         "numpy",
         "perc",
-        "venv"
+        "venv",
+        "yourusername"
     ]
 }
