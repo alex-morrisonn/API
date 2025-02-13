@@ -11,6 +11,7 @@ This repository contains a Python implementation of a high-frequency trading (HF
 - [Usage](#usage)
 - [Configuration](#configuration)
 - [Strategy Details](#strategy-details)
+- [Deployment with Docker and DigitalOcean](#deployment-with-docker-and-digitalocean)
 - [Disclaimer](#disclaimer)
 
 ## Overview
@@ -123,6 +124,85 @@ strategy = HFTMeanReversionStrategy(
 
 - **Trade Management:**  
   Once in a trade, the strategy monitors for exit signals such as reaching the profit target, hitting the stop loss, or the price reverting to the SMA. This helps in locking profits or minimizing losses.
+
+## Deployment with Docker and DigitalOcean
+
+To run this Python script 24/7 without relying on your local machine, you can containerize the application with Docker and deploy it on a DigitalOcean Droplet. Follow these steps:
+
+### 1. Create a Dockerfile
+
+Create a file named `Dockerfile` in the project root with the following content:
+
+```dockerfile
+# Use an official Python runtime as a parent image
+FROM python:3.8-slim
+
+# Set the working directory in the container
+WORKDIR /app
+
+# Copy the requirements file and install dependencies
+COPY requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt
+
+# Copy the rest of the application code into the container
+COPY . .
+
+# Specify the command to run the application
+CMD ["python", "your_script_name.py"]
+```
+
+> **Note:** Replace `your_script_name.py` with the actual filename of your Python script.
+
+### 2. Build the Docker Image
+
+From your project directory, build the Docker image:
+
+```bash
+docker build -t hft-mean-reversion .
+```
+
+### 3. Test the Docker Container Locally
+
+Run the container locally to ensure everything works as expected:
+
+```bash
+docker run --rm hft-mean-reversion
+```
+
+### 4. Set Up a DigitalOcean Droplet
+
+- **Create a Droplet:**  
+  Log in to your DigitalOcean account and create a new Droplet. Choose an image that supports Docker (most Ubuntu distributions work well).
+
+- **Install Docker:**  
+  If Docker is not pre-installed, SSH into your droplet and install Docker by following the [official Docker installation guide](https://docs.docker.com/engine/install/ubuntu/).
+
+### 5. Deploy the Docker Container on DigitalOcean
+
+1. **Transfer Your Code:**  
+   You can either clone your Git repository on the droplet:
+
+   ```bash
+   git clone https://github.com/yourusername/hft-mean-reversion.git
+   cd hft-mean-reversion
+   ```
+
+   Or transfer your code using SCP.
+
+2. **Build the Docker Image on the Droplet:**  
+
+   ```bash
+   docker build -t hft-mean-reversion .
+   ```
+
+3. **Run the Container in Detached Mode:**  
+   Use the `--restart unless-stopped` flag to ensure the container restarts automatically if it crashes or if the droplet reboots.
+
+   ```bash
+   docker run -d --restart unless-stopped hft-mean-reversion
+   ```
+
+Your strategy will now run continuously on DigitalOcean, independent of your local machine.
 
 ## Disclaimer
 
